@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -23,33 +23,85 @@
       background: var(--dark);
       color: #fff;
       overflow-x: hidden;
+      cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='28' font-size='28'>🐾</text></svg>") 0 0, auto;
+    }
+
+    /* random sparkles */
+    .sparkle {
+      position: fixed;
+      pointer-events: none;
+      font-size: 1.5rem;
+      animation: floatUp 1.2s ease-out forwards;
+      z-index: 999;
+    }
+    @keyframes floatUp {
+      0%   { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+      100% { opacity: 0; transform: translateY(-120px) scale(1.8) rotate(30deg); }
+    }
+
+    /* MARQUEE / TICKER */
+    .ticker {
+      background: var(--pink);
+      color: #fff;
+      padding: 0.5rem 0;
+      overflow: hidden;
+      white-space: nowrap;
+      font-weight: 700;
+      font-size: 1.05rem;
+      border-top: 4px solid var(--purple);
+      border-bottom: 4px solid var(--purple);
+    }
+    .ticker-inner {
+      display: inline-block;
+      animation: ticker 18s linear infinite;
+    }
+    @keyframes ticker {
+      from { transform: translateX(100vw); }
+      to   { transform: translateX(-100%); }
     }
 
     /* HERO */
     .hero {
       text-align: center;
-      padding: 3rem 1rem 2rem;
-      position: relative;
+      padding: 2.5rem 1rem 2rem;
       background: linear-gradient(180deg, #2d0a4e 0%, #1a0a2e 100%);
       border-bottom: 4px solid var(--pink);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* floating bg emojis */
+    .hero::before {
+      content: '🐱 OwO 🐾 uwu ✨ 🐱 OwO 🐾 uwu ✨ 🐱';
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      opacity: 0.04;
+      letter-spacing: 1rem;
+      word-break: break-all;
+      pointer-events: none;
     }
 
     .hero h1 {
-      font-size: clamp(2.5rem, 8vw, 5rem);
+      font-size: clamp(2.5rem, 9vw, 5.5rem);
       text-shadow: 4px 4px 0 var(--pink), 8px 8px 0 var(--purple);
-      animation: wobble 2s ease-in-out infinite;
+      animation: wobble 1.8s ease-in-out infinite;
       line-height: 1.1;
+      position: relative;
     }
-
     @keyframes wobble {
-      0%,100% { transform: rotate(-1deg); }
-      50%      { transform: rotate(1deg); }
+      0%,100% { transform: rotate(-1.5deg) skewX(-1deg); }
+      50%      { transform: rotate(1.5deg) skewX(1deg); }
     }
 
     .hero .sub {
-      font-size: 1.3rem;
-      margin-top: 0.5rem;
+      font-size: 1.2rem;
+      margin-top: 0.4rem;
       color: var(--yellow);
+      position: relative;
     }
 
     .belt-display {
@@ -60,11 +112,17 @@
       border-radius: 14px;
       padding: 0.5rem 1.5rem;
       font-size: 1.1rem;
+      position: relative;
+      animation: pulse-border 2s ease-in-out infinite;
+    }
+    @keyframes pulse-border {
+      0%,100% { border-color: var(--purple); }
+      50%      { border-color: var(--pink); }
     }
 
     /* SECTIONS */
     .section {
-      max-width: 820px;
+      max-width: 860px;
       margin: 2rem auto;
       padding: 0 1rem;
     }
@@ -73,127 +131,195 @@
       font-size: 1.8rem;
       margin-bottom: 1rem;
       padding-bottom: 0.4rem;
-      border-bottom: 3px dashed var(--pink);
+      border-bottom: 4px dashed var(--pink);
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      transform: rotate(-0.5deg);
     }
 
     /* MEME CARDS */
     .meme-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 1.25rem;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
     }
 
     .meme-card {
       background: #2d0a4e;
-      border: 3px solid var(--purple);
-      border-radius: 16px;
+      border: 4px solid var(--purple);
+      border-radius: 4px; /* intentionally not rounded — sloppy meme format */
       overflow: hidden;
-      transition: transform 0.15s;
-      cursor: default;
+      transition: transform 0.12s;
+      cursor: pointer;
+      box-shadow: 6px 6px 0 #000;
     }
 
-    .meme-card:hover { transform: scale(1.03) rotate(-0.5deg); }
+    .meme-card:nth-child(odd)  { transform: rotate(-0.8deg); }
+    .meme-card:nth-child(even) { transform: rotate(0.6deg); }
+    .meme-card:hover           { transform: scale(1.05) rotate(0deg) !important; box-shadow: 10px 10px 0 #000; }
 
     .meme-img {
       width: 100%;
-      aspect-ratio: 1;
+      aspect-ratio: 1 / 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 6rem;
-      background: linear-gradient(135deg, #3b0764, #1e1b4b);
+      font-size: 5.5rem;
+      background: #000;
+      position: relative;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    /* impact-style captions */
+    .meme-top, .meme-bot {
+      background: #000;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      text-align: center;
+      padding: 4px 8px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      font-family: Impact, 'Arial Narrow', sans-serif;
+      line-height: 1.2;
+    }
+    .meme-bot { border-top: 3px solid #fff; }
+
+    .meme-body {
+      padding: 0.6rem 0.9rem;
+      font-size: 0.9rem;
+      color: #d8b4fe;
+      border-top: 2px dashed #3b1a6e;
+      background: #1e0a38;
+    }
+
+    /* CHEAT SHEET */
+    .cheat-sheet {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .rule-pill {
+      background: #2d0a4e;
+      border: 3px solid var(--purple);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      text-align: center;
+      box-shadow: 4px 4px 0 #000;
+    }
+
+    .rule-pill .from  { font-size: 1.2rem; color: #f87171; font-weight: 700; font-family: monospace; }
+    .rule-pill .arrow { color: var(--yellow); margin: 0.2rem 0; font-size: 1.3rem; }
+    .rule-pill .to    { font-size: 1.2rem; color: var(--green); font-weight: 700; font-family: monospace; }
+    .rule-pill .note  { font-size: 0.75rem; color: #a78bfa; margin-top: 0.3rem; }
+
+    /* ARENA */
+    .arena {
+      background: #2d0a4e;
+      border: 4px solid var(--pink);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 8px 8px 0 #000;
+    }
+
+    .xp-bar-wrap {
+      background: #1a0a2e;
+      border: 2px solid var(--purple);
+      border-radius: 20px;
+      overflow: hidden;
+      height: 24px;
+      margin: 0.6rem 0;
+    }
+    .xp-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--pink), var(--purple), #60a5fa);
+      border-radius: 20px;
+      transition: width 0.5s ease;
       position: relative;
       overflow: hidden;
     }
-
-    .meme-caption {
-      background: #000;
-      color: #fff;
-      font-size: 0.95rem;
-      font-weight: 700;
-      text-align: center;
-      padding: 0.2rem 0.5rem;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
+    .xp-bar::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%);
+      animation: shimmer 1.5s linear infinite;
+    }
+    @keyframes shimmer {
+      from { transform: translateX(-100%); }
+      to   { transform: translateX(100%); }
     }
 
-    .meme-caption.bottom {
-      border-top: 2px solid #fff;
-    }
-
-    .meme-body {
-      padding: 0.75rem 1rem;
-      font-size: 0.9rem;
-      color: #d8b4fe;
-    }
-
-    /* TRAINING ARENA */
-    .arena {
-      background: #2d0a4e;
-      border: 3px solid var(--pink);
-      border-radius: 20px;
-      padding: 1.5rem;
+    .xp-label {
+      text-align: right;
+      font-size: 0.85rem;
+      color: #a78bfa;
     }
 
     .sensei-bubble {
       display: flex;
       gap: 1rem;
       align-items: flex-start;
-      margin-bottom: 1.25rem;
+      margin: 1rem 0;
     }
 
     .sensei-face {
       font-size: 3.5rem;
       flex-shrink: 0;
-      animation: bounce 1s ease-in-out infinite;
+      animation: bounce 0.9s ease-in-out infinite;
     }
-
     @keyframes bounce {
       0%,100% { transform: translateY(0); }
-      50%      { transform: translateY(-6px); }
+      50%      { transform: translateY(-8px); }
     }
 
     .speech-bubble {
       background: #1a0a2e;
-      border: 2px solid var(--purple);
+      border: 3px solid var(--purple);
       border-radius: 12px;
       padding: 0.75rem 1rem;
-      font-size: 1.05rem;
+      font-size: 1rem;
       position: relative;
       flex: 1;
+      font-style: italic;
     }
-
     .speech-bubble::before {
       content: '';
       position: absolute;
-      left: -12px;
-      top: 16px;
-      border: 6px solid transparent;
+      left: -13px;
+      top: 14px;
+      border: 7px solid transparent;
       border-right-color: var(--purple);
     }
 
     .challenge-word {
-      font-size: 2rem;
+      font-size: 2.4rem;
       font-weight: 700;
       color: var(--yellow);
       text-align: center;
       margin: 1rem 0;
-      letter-spacing: 2px;
+      letter-spacing: 3px;
+      text-shadow: 3px 3px 0 #7c3aed;
+      animation: wiggle 0.4s ease-in-out;
+    }
+    @keyframes wiggle {
+      0%   { transform: scale(0.8) rotate(-3deg); }
+      60%  { transform: scale(1.05) rotate(1deg); }
+      100% { transform: scale(1) rotate(0deg); }
     }
 
     .input-row {
       display: flex;
       gap: 0.75rem;
     }
-
     .input-row input {
       flex: 1;
       background: #1a0a2e;
-      border: 2px solid var(--purple);
-      border-radius: 10px;
+      border: 3px solid var(--purple);
+      border-radius: 8px;
       padding: 0.7rem 1rem;
       font-size: 1.1rem;
       font-family: inherit;
@@ -201,25 +327,23 @@
       outline: none;
       transition: border-color 0.2s;
     }
-
     .input-row input:focus { border-color: var(--pink); }
 
     button {
       background: linear-gradient(135deg, var(--pink), var(--purple));
       color: #fff;
-      border: none;
-      border-radius: 10px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-radius: 8px;
       padding: 0.7rem 1.4rem;
       font-size: 1rem;
       font-family: inherit;
       font-weight: 700;
       cursor: pointer;
-      transition: transform 0.1s, box-shadow 0.2s;
-      box-shadow: 0 4px 12px rgba(168,85,247,0.5);
+      transition: transform 0.1s;
+      box-shadow: 4px 4px 0 #000;
     }
-
-    button:hover { transform: translateY(-2px); }
-    button:active { transform: scale(0.97); }
+    button:hover  { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 #000; }
+    button:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #000; }
 
     .feedback-zone {
       margin-top: 1rem;
@@ -229,74 +353,49 @@
       min-height: 2rem;
     }
 
-    /* PROGRESS BAR */
-    .xp-bar-wrap {
-      background: #1a0a2e;
-      border: 2px solid var(--purple);
-      border-radius: 20px;
-      overflow: hidden;
-      height: 22px;
-      margin: 0.75rem 0;
-    }
-
-    .xp-bar {
-      height: 100%;
-      background: linear-gradient(90deg, var(--pink), var(--purple));
-      border-radius: 20px;
-      transition: width 0.5s ease;
-    }
-
-    .xp-label {
-      text-align: right;
-      font-size: 0.85rem;
-      color: var(--purple);
-      margin-top: 0.2rem;
+    .combo {
+      text-align: center;
+      font-size: 1.1rem;
+      color: var(--yellow);
+      margin-top: 0.5rem;
+      min-height: 1.5rem;
+      font-weight: 700;
     }
 
     /* BELTS */
     .belts {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.75rem;
+      gap: 1rem;
       justify-content: center;
     }
-
     .belt {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 0.3rem;
-      opacity: 0.35;
-      transition: opacity 0.3s;
+      opacity: 0.3;
+      transition: opacity 0.4s, transform 0.2s;
       font-size: 0.8rem;
       text-align: center;
     }
-
     .belt.unlocked { opacity: 1; }
-
+    .belt.unlocked:hover { transform: scale(1.1); }
     .belt-icon {
-      width: 56px;
-      height: 22px;
+      width: 60px;
+      height: 24px;
       border-radius: 4px;
-      border: 2px solid rgba(255,255,255,0.3);
+      border: 3px solid rgba(255,255,255,0.4);
+      box-shadow: 3px 3px 0 #000;
     }
 
-    /* COMBO COUNTER */
-    .combo {
-      text-align: center;
-      font-size: 1rem;
-      color: var(--yellow);
-      margin-top: 0.5rem;
-      min-height: 1.5rem;
-    }
-
-    /* FAIL MEME overlay */
+    /* OVERLAY */
     .overlay {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.85);
-      z-index: 100;
+      background: rgba(0,0,0,0.88);
+      z-index: 200;
       align-items: center;
       justify-content: center;
       flex-direction: column;
@@ -304,129 +403,138 @@
       text-align: center;
       padding: 2rem;
     }
-
     .overlay.show { display: flex; }
 
-    .overlay .big-emoji { font-size: 8rem; animation: spin 0.6s ease-out; }
-    @keyframes spin { from { transform: rotate(-30deg) scale(0.5); } to { transform: rotate(0) scale(1); } }
+    .overlay .big-emoji {
+      font-size: 9rem;
+      animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes popIn {
+      from { transform: scale(0) rotate(-20deg); }
+      to   { transform: scale(1) rotate(0deg); }
+    }
+    .overlay h2 { font-size: 2.8rem; color: var(--pink); text-shadow: 3px 3px 0 #000; }
+    .overlay p  { font-size: 1.2rem; color: var(--yellow); max-width: 440px; line-height: 1.5; }
 
-    .overlay h2 { font-size: 2.5rem; color: var(--pink); }
-    .overlay p  { font-size: 1.2rem; color: var(--yellow); max-width: 400px; }
-
-    /* SCROLLING TICKER */
-    .ticker {
-      background: var(--pink);
+    /* LEVEL UP TOAST */
+    .toast {
+      position: fixed;
+      top: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(-120px);
+      background: linear-gradient(135deg, var(--pink), var(--purple));
       color: #fff;
-      padding: 0.4rem 0;
-      overflow: hidden;
-      white-space: nowrap;
-      font-weight: 700;
-      font-size: 1rem;
-      border-top: 3px solid var(--purple);
-      border-bottom: 3px solid var(--purple);
-    }
-
-    .ticker-inner {
-      display: inline-block;
-      animation: ticker 20s linear infinite;
-    }
-
-    @keyframes ticker {
-      from { transform: translateX(100vw); }
-      to   { transform: translateX(-100%); }
-    }
-
-    /* RULES SHEET */
-    .cheat-sheet {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 0.75rem;
-    }
-
-    .rule-pill {
-      background: #2d0a4e;
-      border: 2px solid var(--purple);
+      border: 3px solid #fff;
       border-radius: 12px;
-      padding: 0.75rem 1rem;
+      padding: 0.75rem 2rem;
+      font-size: 1.3rem;
+      font-weight: 700;
+      z-index: 300;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       text-align: center;
     }
-
-    .rule-pill .from { font-size: 1.1rem; color: #f87171; font-weight: 700; }
-    .rule-pill .arrow { color: var(--yellow); margin: 0.2rem 0; }
-    .rule-pill .to   { font-size: 1.1rem; color: var(--green); font-weight: 700; }
-    .rule-pill .note { font-size: 0.75rem; color: #a78bfa; margin-top: 0.3rem; }
+    .toast.show { transform: translateX(-50%) translateY(0); }
 
     footer {
       text-align: center;
       padding: 2rem;
       color: #6b21a8;
       font-size: 0.9rem;
+      border-top: 3px dashed #2d0a4e;
     }
   </style>
 </head>
 <body>
 
-<!-- TICKER -->
 <div class="ticker">
   <span class="ticker-inner">
-    🐱 WELCOME TO UWU DOJO &nbsp;·&nbsp; WHERE CRINGE IS A LIFESTYLE &nbsp;·&nbsp; r → w &nbsp;·&nbsp; l → w &nbsp;·&nbsp; th → d &nbsp;·&nbsp; YOU WILL BE UwU'ED &nbsp;·&nbsp; NO ESCAPE &nbsp;·&nbsp; OwO WHAT'S THIS &nbsp;·&nbsp; 🐱 WELCOME TO UWU DOJO &nbsp;·&nbsp; WHERE CRINGE IS A LIFESTYLE &nbsp;·&nbsp; r → w &nbsp;·&nbsp; l → w &nbsp;·&nbsp; th → d &nbsp;·&nbsp; YOU WILL BE UwU'ED &nbsp;·&nbsp; NO ESCAPE &nbsp;·&nbsp; OwO WHAT'S THIS &nbsp;·&nbsp;
+    🐱 WELCOME TO UWU DOJO &nbsp;·&nbsp; WHERE CRINGE IS A LIFESTYLE &nbsp;·&nbsp;
+    r → w &nbsp;·&nbsp; l → w &nbsp;·&nbsp; th → d &nbsp;·&nbsp;
+    YOU WILL BE UwU'ED &nbsp;·&nbsp; NO ESCAPE &nbsp;·&nbsp; OwO WHAT'S THIS &nbsp;·&nbsp;
+    THIS IS NOT A PHASE MOM &nbsp;·&nbsp; 🐾 PAWSOME &nbsp;·&nbsp; EMBRACE THE CRINGE &nbsp;·&nbsp;
+    🐱 WELCOME TO UWU DOJO &nbsp;·&nbsp; WHERE CRINGE IS A LIFESTYLE &nbsp;·&nbsp;
+    r → w &nbsp;·&nbsp; l → w &nbsp;·&nbsp; th → d &nbsp;·&nbsp;
+    YOU WILL BE UwU'ED &nbsp;·&nbsp; NO ESCAPE &nbsp;·&nbsp; OwO WHAT'S THIS &nbsp;·&nbsp;
   </span>
 </div>
 
-<!-- HERO -->
 <div class="hero">
   <h1>UwU DOJO 🥋</h1>
-  <p class="sub">Die härteste UwU-Trainingsschule im Internet</p>
+  <p class="sub">the hardest uwu training school on the internet (no cap fr fr)</p>
   <div class="belt-display">
-    Dein Rang: <span id="beltName">🤡 Normalo (Weißgurt)</span>
+    ur rank: <span id="beltName">🤡 Normal Person (White Belt)</span>
   </div>
 </div>
 
-<!-- MEME SECTION -->
+<!-- MEMES -->
 <div class="section">
-  <div class="section-title">😂 Lern von den Meistern</div>
+  <div class="section-title">😂 learn from the masters</div>
   <div class="meme-grid">
 
     <div class="meme-card">
-      <div class="meme-caption">NIEMAND:</div>
+      <div class="meme-top">NOBODY:</div>
       <div class="meme-img">🐱</div>
-      <div class="meme-caption bottom">UwU ENJOYER UM 3 UHR NACHTS:</div>
-      <div class="meme-body">"Hewwo fwiend, can u hewp me wif my maf homewowk uwu (◕ω◕)"</div>
+      <div class="meme-bot">UwU ENJOYER AT 3AM:</div>
+      <div class="meme-body">"hewwo fwiend can u hewp me wif my maf homewowk uwu (◕ω◕)"</div>
     </div>
 
     <div class="meme-card">
-      <div class="meme-caption">DAS R UND DAS L WENN SIE DICH SEHEN:</div>
+      <div class="meme-top">THE LETTER R AND L WHEN THEY SEE YOU:</div>
       <div class="meme-img">💀</div>
-      <div class="meme-caption bottom">"WIR WERDEN ZU W"</div>
-      <div class="meme-body">r → w &nbsp;&nbsp; l → w &nbsp;&nbsp; Es gibt kein Entkommen.</div>
+      <div class="meme-bot">"WE BECOME W NOW"</div>
+      <div class="meme-body">r → w &nbsp;&nbsp; l → w &nbsp;&nbsp; there is no escape. never was.</div>
     </div>
 
     <div class="meme-card">
-      <div class="meme-caption">MEINE MOM WENN ICH</div>
+      <div class="meme-top">MY MOM WHEN I TYPE</div>
       <div class="meme-img">😤</div>
-      <div class="meme-caption bottom">"PLEASE" SCHREIBE STATT "PWEASE"</div>
-      <div class="meme-body">"Bist du sicher dass du genug UwU trainiert hast?? 😤"</div>
+      <div class="meme-bot">"PLEASE" INSTEAD OF "PWEASE"</div>
+      <div class="meme-body">"are u sure u trained enough uwu?? im calling ur sensei 😤"</div>
     </div>
 
     <div class="meme-card">
-      <div class="meme-caption">INTERVIEWER: STÄRKEN?</div>
+      <div class="meme-top">INTERVIEWER: STRENGTHS?</div>
       <div class="meme-img">🐾</div>
-      <div class="meme-caption bottom">ICH: "I am vewy good at uwu-speak OwO"</div>
-      <div class="meme-body">Interviewer: *schreibt "überqualifiziert" hin*</div>
+      <div class="meme-bot">ME: "i am vewy good at uwu-speak OwO"</div>
+      <div class="meme-body">interviewer: *writes "overqualified"* 💼</div>
     </div>
 
     <div class="meme-card">
-      <div class="meme-caption">LEVEL 1 CROOK</div>
-      <div class="meme-img" style="font-size:4rem;">😊<br><small style="font-size:1.5rem;">schreibt normal</small></div>
-      <div class="meme-caption bottom">LEVEL 100 BOSS</div>
+      <div class="meme-top">LEVEL 1 CROOK</div>
+      <div class="meme-img" style="font-size:3.5rem;flex-direction:column;gap:0.2rem;">
+        😊<span style="font-size:1rem;color:#aaa">types normally</span>
+      </div>
+      <div class="meme-bot">LEVEL 100 MAFIA BOSS</div>
       <div class="meme-body">"h-hewwo… i-i wuv u so much… pwease notice me senpai UwU 🐱✨"</div>
     </div>
 
     <div class="meme-card">
-      <div class="meme-caption">DEUTSCHE SPRACHE:</div>
-      <div class="meme-img">🇩🇪</div>
-      <div class="meme-caption bottom">DEUTSCHE SPRACHE IM UWU-DOJO:</div>
-      <div class="meme-body">"Ich wiebe dich so sehr uwu" &nbsp; "Awwes gutew?" &nbsp; "Danke schöwn OwO"</div>
+      <div class="meme-top">BRAIN AT 2PM:</div>
+      <div class="meme-img">🧠</div>
+      <div class="meme-bot">BRAIN AT 2AM:</div>
+      <div class="meme-body">"what if i uwuified the entire declaration of independence"<br><br>*proceeds to do it*</div>
+    </div>
+
+    <div class="meme-card">
+      <div class="meme-top">DOCTOR: U HAVE 24 HOURS TO LIVE</div>
+      <div class="meme-img">😳</div>
+      <div class="meme-bot">ME:</div>
+      <div class="meme-body">"i-i onwy have 24 houws weft??? OwO" *spends them all practicing uwu*</div>
+    </div>
+
+    <div class="meme-card">
+      <div class="meme-top">GOOGLE TRANSLATE:</div>
+      <div class="meme-img">🌍</div>
+      <div class="meme-bot">UWU TRANSLATE:</div>
+      <div class="meme-body">"hello world" → "hewwo wowwd UwU"<br>"i love you" → "i wuv u OwO"<br>"please stop" → "pwease stop 🥺"</div>
+    </div>
+
+    <div class="meme-card">
+      <div class="meme-top">NORMAL PERSON CRYING:</div>
+      <div class="meme-img">😢</div>
+      <div class="meme-bot">UWU PERSON CRYING:</div>
+      <div class="meme-body">"*sniffwe* i-i c-can't stop c-cwying uwu... pwease send hewp OwO 🥺💦"</div>
     </div>
 
   </div>
@@ -434,93 +542,106 @@
 
 <!-- CHEAT SHEET -->
 <div class="section">
-  <div class="section-title">📋 Der heilige Spickzettel</div>
+  <div class="section-title">📋 the holy cheat sheet</div>
   <div class="cheat-sheet">
     <div class="rule-pill">
       <div class="from">r / l</div>
       <div class="arrow">↓</div>
       <div class="to">w</div>
-      <div class="note">Die #1 Regel. Heilig.</div>
+      <div class="note">rule #1. sacred. non-negotiable.</div>
     </div>
     <div class="rule-pill">
       <div class="from">th</div>
       <div class="arrow">↓</div>
       <div class="to">d</div>
-      <div class="note">"the" → "de"</div>
+      <div class="note">"the" → "de". yes really.</div>
     </div>
     <div class="rule-pill">
-      <div class="from">na / ne / ni…</div>
+      <div class="from">na/ne/ni…</div>
       <div class="arrow">↓</div>
-      <div class="to">nya / nye…</div>
-      <div class="note">Katzen-Modus 🐱</div>
+      <div class="to">nya/nye…</div>
+      <div class="note">cat mode activated 🐱</div>
     </div>
     <div class="rule-pill">
-      <div class="from">Satzanfang</div>
+      <div class="from">sentence start</div>
       <div class="arrow">↓</div>
-      <div class="to">H-h… stottern</div>
-      <div class="note">"Hello" → "H-hewwo"</div>
+      <div class="to">stutter it</div>
+      <div class="note">"hello" → "h-hewwo"</div>
     </div>
     <div class="rule-pill">
-      <div class="from">Satzende</div>
+      <div class="from">sentence end</div>
       <div class="arrow">↓</div>
-      <div class="to">+ UwU / OwO</div>
-      <div class="note">Pflicht. Keine Ausnahmen.</div>
+      <div class="to">UwU / OwO</div>
+      <div class="note">mandatory. no exceptions. ever.</div>
     </div>
     <div class="rule-pill">
       <div class="from">you</div>
       <div class="arrow">↓</div>
       <div class="to">u</div>
-      <div class="note">Lazy typing = UwU style</div>
+      <div class="note">lazy typing = peak uwu energy</div>
     </div>
   </div>
 </div>
 
-<!-- TRAINING ARENA -->
+<!-- ARENA -->
 <div class="section">
-  <div class="section-title">🥋 Training Arena</div>
+  <div class="section-title">🥋 training arena</div>
   <div class="arena">
-
     <div class="xp-bar-wrap"><div class="xp-bar" id="xpBar" style="width:0%"></div></div>
     <div class="xp-label">XP: <span id="xpLabel">0</span> / <span id="xpMax">100</span></div>
 
     <div class="sensei-bubble">
       <div class="sensei-face" id="senseiFace">🐱</div>
-      <div class="speech-bubble" id="senseiText">Bereit, Schüler? Schreib das folgende Wort auf UwU um! Du schaffst das UwU~</div>
+      <div class="speech-bubble" id="senseiText">hewwo student!! uwuify de fowwowing wowd ok?? u can do it UwU~</div>
     </div>
 
     <div class="challenge-word" id="challengeWord">???</div>
 
     <div class="input-row">
-      <input type="text" id="uwuInput" placeholder="Deine UwU-Antwort…" autocomplete="off" />
-      <button onclick="checkAnswer()">GO! 🐾</button>
+      <input type="text" id="uwuInput" placeholder="ur uwu answer here…" autocomplete="off" />
+      <button onclick="checkAnswer()">GO!! 🐾</button>
     </div>
 
     <div class="feedback-zone" id="feedback"></div>
     <div class="combo" id="combo"></div>
-
   </div>
 </div>
 
-<!-- BELT SYSTEM -->
+<!-- BELTS -->
 <div class="section">
-  <div class="section-title">🏅 Gurtсистема</div>
+  <div class="section-title">🏅 belt system (very legit)</div>
   <div class="belts" id="beltsDisplay"></div>
 </div>
 
-<!-- FAIL OVERLAY -->
+<!-- OVERLAY -->
 <div class="overlay" id="overlay">
   <div class="big-emoji" id="overlayEmoji">💀</div>
   <h2 id="overlayTitle">SKILL ISSUE</h2>
-  <p id="overlayMsg">Du hast nicht mal annähernd die richtige Antwort. Schande.</p>
-  <button onclick="closeOverlay()">Nochmal versuchen 🥺</button>
+  <p id="overlayMsg">u failed. spongebob is disappointed in u.</p>
+  <button onclick="closeOverlay()">try again pls 🥺</button>
 </div>
 
+<!-- LEVEL UP TOAST -->
+<div class="toast" id="toast">🎉 BELT UP!! UwU</div>
+
 <footer>
-  UwU Dojo &copy; 2026 &nbsp;·&nbsp; No cringe left behind &nbsp;·&nbsp; (◕ω◕)
+  UwU Dojo &copy; 2026 &nbsp;·&nbsp; no cringe left behind &nbsp;·&nbsp; (◕ω◕) &nbsp;·&nbsp; made with 0 braincells
 </footer>
 
 <script>
-// ── UwU Engine ────────────────────────────────────────────────────
+// ── click sparkles ─────────────────────────────────────────────────
+const SPARKS = ['✨','💫','🐾','UwU','OwO','uwu','🌸','💕','⭐'];
+document.addEventListener('click', e => {
+  const s = document.createElement('div');
+  s.className = 'sparkle';
+  s.textContent = SPARKS[Math.floor(Math.random() * SPARKS.length)];
+  s.style.left = (e.clientX - 16) + 'px';
+  s.style.top  = (e.clientY - 16) + 'px';
+  document.body.appendChild(s);
+  setTimeout(() => s.remove(), 1200);
+});
+
+// ── UwU engine ─────────────────────────────────────────────────────
 function uwuify(text) {
   let o = text;
   o = o.replace(/th/gi, m => m[0] === m[0].toUpperCase() ? 'D' : 'd');
@@ -529,63 +650,103 @@ function uwuify(text) {
   return o;
 }
 
-// ── Challenges ────────────────────────────────────────────────────
+// ── challenges ─────────────────────────────────────────────────────
 const CHALLENGES = [
-  { word: 'love',      hint: 'l→w, o, v, e' },
-  { word: 'really',    hint: 'r→w, e, a, l→w, l→w, y' },
-  { word: 'hello',     hint: 'h, e, l→w, l→w, o' },
-  { word: 'please',    hint: 'p, l→w, e, a, s, e' },
-  { word: 'flower',    hint: 'f, l→w, o, w, e, r→w' },
-  { word: 'little',    hint: 'l→w, i, t, t, l→w, e' },
-  { word: 'friend',    hint: 'f, r→w, i, e, n, d' },
-  { word: 'horrible',  hint: 'h, o, r→w, r→w, i, b, l→w, e' },
-  { word: 'normal',    hint: 'n, o, r→w, m, a, l→w' },
-  { word: 'rainbow',   hint: 'r→w, a, i, n, b, o, w' },
-  { word: 'chocolate', hint: 'c, h, o, c, o, l→w, a, t, e' },
-  { word: 'the',       hint: 'th→d + e' },
-  { word: 'this',      hint: 'th→d + is' },
-  { word: 'through',   hint: 'th→d + rough' },
-  { word: 'brother',   hint: 'b, r→w, o, th→d, e, r→w' },
-  { word: 'together',  hint: 't, o, g, e, th→d, e, r→w' },
-  { word: 'cruel',     hint: 'c, r→w, u, e, l→w' },
-  { word: 'terrible',  hint: 't, e, r→w, r→w, i, b, l→w, e' },
-  { word: 'purr',      hint: 'p, u, r→w, r→w' },
-  { word: 'world',     hint: 'w, o, r→w, l→w, d' },
+  'love','really','hello','please','flower','little','friend',
+  'horrible','normal','rainbow','chocolate','the','this','through',
+  'brother','together','cruel','terrible','purr','world',
+  'library','literally','already','probably','clearly','forever',
+  'literally','controller','player','level','roller','thriller',
 ];
 
-// ── Belt System ────────────────────────────────────────────────────
+// ── belts ──────────────────────────────────────────────────────────
 const BELTS = [
-  { xp: 0,   name: '🤡 Normalo',          color: '#ffffff', label: 'Weißgurt' },
-  { xp: 50,  name: '🌸 Kawaii Anfänger',  color: '#fda4af', label: 'Rosagurt' },
-  { xp: 120, name: '😸 UwU Lehrling',     color: '#c084fc', label: 'Lilagurt' },
-  { xp: 230, name: '✨ UwU Kämpfer',      color: '#60a5fa', label: 'Blaugurt' },
-  { xp: 380, name: '🐱 UwU Sensei',       color: '#4ade80', label: 'Grüngurt' },
-  { xp: 600, name: '👑 UwU Gottheit',     color: '#fde047', label: 'Goldgurt' },
+  { xp:   0, name: '🤡 Normal Person',      color: '#ffffff', label: 'White Belt' },
+  { xp:  50, name: '🌸 Kawaii Beginner',    color: '#fda4af', label: 'Pink Belt'  },
+  { xp: 120, name: '😸 UwU Apprentice',     color: '#c084fc', label: 'Purple Belt'},
+  { xp: 230, name: '✨ UwU Fighter',         color: '#60a5fa', label: 'Blue Belt'  },
+  { xp: 380, name: '🐱 UwU Sensei',         color: '#4ade80', label: 'Green Belt' },
+  { xp: 600, name: '👑 UwU GOD',            color: '#fde047', label: 'Gold Belt'  },
 ];
 
-// ── State ──────────────────────────────────────────────────────────
-let xp        = 0;
-let combo     = 0;
-let fails     = 0;
-let cIdx      = 0;
-let answered  = false;
+// ── state ──────────────────────────────────────────────────────────
+let xp = 0, combo = 0, fails = 0, cIdx = 0, answered = false;
+let prevBeltIdx = 0;
 
 const shuffled = [...CHALLENGES].sort(() => Math.random() - 0.5);
-
 function currentChallenge() { return shuffled[cIdx % shuffled.length]; }
 
-const SENSEI_OK  = ['Sugoi!! UwU', 'Perfekt, Schüler! OwO', 'Yasss!! 🐾', 'Du bist ein Naturtalent uwu~', 'NANI?! Das war perfekt!'];
-const SENSEI_MEH = ['Fast… aber FAST reicht nicht! 😤', 'Hmm… du kannst das besser UwU', 'Schüler… ich bin enttäuscht OwO', 'Das war so nah und doch so fern 💀'];
-const SENSEI_INTRO = ['Bereit, Schüler? Schreib das folgende Wort auf UwU um! Du schaffst das UwU~', 'Das nächste Wort wartet auf dich, Schüler! OwO', 'Konzentrier dich! Denk an die Regeln!'];
+const SENSEI_OK  = [
+  'SUGOI!! UwU', 'puwfect!! OwO', 'YASSS!! 🐾',
+  'u awe a natuwal talent uwu~', 'NANI?! dat was puwfect!!',
+  'i am so pwoud of u 🥺', 'GOATED FR FR UwU',
+];
+const SENSEI_MEH = [
+  'cwose… but cwose ain\'t good enough 😤',
+  'hmm… u can do bettew UwU',
+  'student… i am disappointed OwO',
+  'dat was so cwose and yet so faw 💀',
+  'did u even wead de cheat sheet 🤨',
+];
+const SENSEI_INTRO = [
+  'hewwo student!! uwuify de fowwowing wowd ok?? u can do it UwU~',
+  'next wowd!! no pwesuwe. (lots of pwesuwe.) OwO',
+  'fowcus! wemembew de wuwes!! 🐾',
+  'u got dis!! pwobabwy. maybe. UwU',
+];
 
 function setSensei(msgs, face) {
   document.getElementById('senseiText').textContent = msgs[Math.floor(Math.random() * msgs.length)];
   document.getElementById('senseiFace').textContent = face || '🐱';
 }
 
+function getBelt() {
+  let belt = BELTS[0], idx = 0;
+  BELTS.forEach((b, i) => { if (xp >= b.xp) { belt = b; idx = i; } });
+  return { belt, idx };
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function updateUI() {
+  const { belt, idx } = getBelt();
+  const nextBelt = BELTS[idx + 1];
+  const min = belt.xp;
+  const max = nextBelt ? nextBelt.xp : belt.xp + 100;
+  const pct = Math.min(100, Math.round((xp - min) / (max - min) * 100));
+
+  document.getElementById('xpBar').style.width = pct + '%';
+  document.getElementById('xpLabel').textContent = xp;
+  document.getElementById('xpMax').textContent   = max;
+  document.getElementById('beltName').textContent = belt.name + ' (' + belt.label + ')';
+
+  if (idx > prevBeltIdx) {
+    showToast('🎉 BELT UP!! ' + belt.name + ' UwU');
+    prevBeltIdx = idx;
+  }
+
+  const bd = document.getElementById('beltsDisplay');
+  bd.innerHTML = '';
+  BELTS.forEach(b => {
+    const el = document.createElement('div');
+    el.className = 'belt' + (xp >= b.xp ? ' unlocked' : '');
+    el.innerHTML = `<div class="belt-icon" style="background:${b.color}"></div><div>${b.label}</div><small style="opacity:0.5">${b.xp} XP</small>`;
+    bd.appendChild(el);
+  });
+}
+
 function loadChallenge() {
-  const c = currentChallenge();
-  document.getElementById('challengeWord').textContent = c.word;
+  const word = currentChallenge();
+  const el = document.getElementById('challengeWord');
+  el.textContent = word;
+  el.style.animation = 'none';
+  void el.offsetWidth;
+  el.style.animation = '';
   document.getElementById('uwuInput').value = '';
   document.getElementById('feedback').textContent = '';
   document.getElementById('uwuInput').focus();
@@ -593,83 +754,49 @@ function loadChallenge() {
   setSensei(SENSEI_INTRO, '🐱');
 }
 
-function getBelt() {
-  let belt = BELTS[0];
-  for (const b of BELTS) { if (xp >= b.xp) belt = b; }
-  return belt;
-}
-
-function updateUI() {
-  const belt    = getBelt();
-  const nextIdx = BELTS.indexOf(belt) + 1;
-  const nextBelt = BELTS[nextIdx];
-  const min     = belt.xp;
-  const max     = nextBelt ? nextBelt.xp : belt.xp + 100;
-  const pct     = Math.min(100, Math.round((xp - min) / (max - min) * 100));
-
-  document.getElementById('xpBar').style.width = pct + '%';
-  document.getElementById('xpLabel').textContent = xp;
-  document.getElementById('xpMax').textContent   = max;
-  document.getElementById('beltName').textContent = belt.name + ' (' + belt.label + ')';
-
-  // Belts display
-  const bd = document.getElementById('beltsDisplay');
-  bd.innerHTML = '';
-  BELTS.forEach(b => {
-    const el = document.createElement('div');
-    el.className = 'belt' + (xp >= b.xp ? ' unlocked' : '');
-    el.innerHTML = `<div class="belt-icon" style="background:${b.color}"></div><div>${b.label}</div><div style="font-size:0.7rem;opacity:0.6">${b.xp} XP</div>`;
-    bd.appendChild(el);
-  });
-}
-
 function checkAnswer() {
   if (answered) return;
-
-  const c      = currentChallenge();
+  const word   = currentChallenge();
   const answer = document.getElementById('uwuInput').value.trim().toLowerCase();
-  const correct = uwuify(c.word).toLowerCase();
+  const correct = uwuify(word).toLowerCase();
   const fb      = document.getElementById('feedback');
   const comboEl = document.getElementById('combo');
-
   if (!answer) return;
-
   answered = true;
 
   if (answer === correct) {
-    combo++;
-    fails = 0;
+    combo++; fails = 0;
     const gained = 10 + (combo > 2 ? combo * 3 : 0);
     xp += gained;
-    fb.innerHTML = `<span style="color:#4ade80">✅ KORREKT! +${gained} XP</span>`;
-    if (combo >= 3) comboEl.textContent = `🔥 COMBO x${combo}!! SUGOI!!`;
-    else comboEl.textContent = '';
+    fb.innerHTML = `<span style="color:#4ade80">✅ CORRECT!! +${gained} XP</span>`;
+    comboEl.textContent = combo >= 3 ? `🔥 COMBO x${combo}!! GOATED!!` : '';
     setSensei(SENSEI_OK, combo >= 5 ? '👑' : '😸');
     updateUI();
-    setTimeout(() => { cIdx++; loadChallenge(); }, 1100);
+    setTimeout(() => { cIdx++; loadChallenge(); }, 1000);
   } else {
-    combo = 0;
-    fails++;
+    combo = 0; fails++;
     comboEl.textContent = '';
-    fb.innerHTML = `<span style="color:#f87171">❌ Falsch! Richtig: <b style="color:#fde68a">${correct}</b></span>`;
+    fb.innerHTML = `<span style="color:#f87171">❌ wrong!! correct: <b style="color:#fde68a">${correct}</b></span>`;
     setSensei(SENSEI_MEH, '😤');
-
-    if (fails >= 3 && Math.random() < 0.5) {
-      showOverlay();
+    if (fails >= 3 && Math.random() < 0.6) {
+      setTimeout(showOverlay, 600);
     } else {
       setTimeout(() => { answered = false; document.getElementById('uwuInput').focus(); }, 1200);
     }
   }
 }
 
+const OVERLAYS = [
+  { e: '💀', t: 'SKILL ISSUE',      m: 'u failed 3 times. spongebob is crying rn. this is ur fault.' },
+  { e: '🤦', t: 'OMG NO',           m: 'the r was RIGHT THERE. it was gonna be a w. it was SO CLOSE.' },
+  { e: '😭', t: 'UNBELIEVABLE',      m: 'a virtual belt has been taken away. (jk. but imagine lmao)' },
+  { e: '🐸', t: 'KERMIT SPEAKS',    m: '"and on this day, the internet became a little sadder." — kermit the frog' },
+  { e: '🗿', t: 'STONKS: 📉',       m: 'ur uwu score just went negative. congratulations on achieving nothing.' },
+  { e: '📉', t: 'NOT LIKE THIS',    m: 'i trained u for NOTHING. go touch grass and come back ready. 😤' },
+];
+
 function showOverlay() {
-  const memes = [
-    { e: '💀', t: 'SKILL ISSUE', m: 'Du hast jetzt 3× versagt. Spongebob schämt sich für dich.' },
-    { e: '🤦', t: 'OMG NO', m: 'Das r wäre ein w geworden. Das WÄRE ein W GEWORDEN.' },
-    { e: '😭', t: 'NICHT ZU FASSEN', m: 'Ein Gurt wurde gerade von deinem Profil entfernt. (JK. Aber stell dir vor!)' },
-    { e: '🐸', t: 'ALSO SPRACH DER FROSCH', m: '"Und an diesem Tag wurde das Internet ein bisschen trauriger." — Kermit der Frosch' },
-  ];
-  const m = memes[Math.floor(Math.random() * memes.length)];
+  const m = OVERLAYS[Math.floor(Math.random() * OVERLAYS.length)];
   document.getElementById('overlayEmoji').textContent = m.e;
   document.getElementById('overlayTitle').textContent = m.t;
   document.getElementById('overlayMsg').textContent   = m.m;
@@ -678,8 +805,7 @@ function showOverlay() {
 
 function closeOverlay() {
   document.getElementById('overlay').classList.remove('show');
-  fails = 0;
-  answered = false;
+  fails = 0; answered = false;
   document.getElementById('uwuInput').focus();
 }
 
@@ -687,7 +813,6 @@ document.getElementById('uwuInput').addEventListener('keydown', e => {
   if (e.key === 'Enter') checkAnswer();
 });
 
-// Init
 updateUI();
 loadChallenge();
 </script>
