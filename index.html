@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UwU Tutorial ✨</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #ffd6e7, #c9b8ff, #b8e8ff);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+      color: #4a2060;
+    }
+
+    h1 {
+      font-size: 3rem;
+      text-align: center;
+      text-shadow: 2px 2px 0 #e8a0d0;
+      margin-bottom: 0.25rem;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 1.1rem;
+      opacity: 0.7;
+      margin-bottom: 2.5rem;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.75);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 1.75rem 2rem;
+      max-width: 680px;
+      width: 100%;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 20px rgba(180,120,220,0.2);
+    }
+
+    .card h2 {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .rule {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.9rem;
+      padding: 0.75rem 1rem;
+      background: rgba(255,255,255,0.6);
+      border-radius: 12px;
+      border-left: 4px solid #c084fc;
+      flex-wrap: wrap;
+    }
+
+    .rule-arrow {
+      font-size: 1.2rem;
+      color: #c084fc;
+    }
+
+    .rule code {
+      font-family: monospace;
+      font-size: 1rem;
+      background: #f0e6ff;
+      padding: 2px 7px;
+      border-radius: 6px;
+      color: #7c3aed;
+    }
+
+    .rule .desc {
+      font-size: 0.9rem;
+      opacity: 0.7;
+      flex-basis: 100%;
+      margin-top: 0.25rem;
+    }
+
+    /* Converter */
+    .converter textarea, .converter input[type=text] {
+      width: 100%;
+      border: 2px solid #e0c8ff;
+      border-radius: 12px;
+      padding: 0.85rem 1rem;
+      font-size: 1rem;
+      font-family: inherit;
+      outline: none;
+      background: rgba(255,255,255,0.8);
+      color: #4a2060;
+      resize: vertical;
+      transition: border-color 0.2s;
+    }
+
+    .converter textarea:focus {
+      border-color: #c084fc;
+    }
+
+    .converter label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      margin-top: 1rem;
+    }
+
+    .converter label:first-child { margin-top: 0; }
+
+    .output-box {
+      background: #f5edff;
+      border: 2px solid #e0c8ff;
+      border-radius: 12px;
+      padding: 0.85rem 1rem;
+      min-height: 3.5rem;
+      font-size: 1.1rem;
+      color: #6d28d9;
+      word-break: break-word;
+      white-space: pre-wrap;
+    }
+
+    /* Examples */
+    .examples-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    .example {
+      background: rgba(255,255,255,0.6);
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      font-size: 0.95rem;
+    }
+
+    .example .before { opacity: 0.6; font-size: 0.85rem; margin-bottom: 0.2rem; }
+    .example .after  { color: #7c3aed; font-weight: 600; }
+
+    /* Quiz */
+    .quiz-question {
+      font-size: 1.05rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .quiz-input-row {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .quiz-input-row input {
+      flex: 1;
+      border: 2px solid #e0c8ff;
+      border-radius: 10px;
+      padding: 0.6rem 0.9rem;
+      font-size: 1rem;
+      font-family: inherit;
+      outline: none;
+      background: rgba(255,255,255,0.8);
+      color: #4a2060;
+      transition: border-color 0.2s;
+    }
+
+    .quiz-input-row input:focus { border-color: #c084fc; }
+
+    button {
+      background: linear-gradient(135deg, #c084fc, #818cf8);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 0.6rem 1.4rem;
+      font-size: 1rem;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 600;
+      transition: transform 0.1s, box-shadow 0.2s;
+      box-shadow: 0 3px 10px rgba(192,132,252,0.4);
+    }
+
+    button:hover { transform: translateY(-1px); box-shadow: 0 5px 15px rgba(192,132,252,0.5); }
+    button:active { transform: translateY(0); }
+
+    .quiz-feedback {
+      margin-top: 0.75rem;
+      font-size: 1rem;
+      min-height: 1.5rem;
+      font-weight: 600;
+    }
+
+    .correct { color: #16a34a; }
+    .wrong   { color: #dc2626; }
+
+    .progress {
+      font-size: 0.85rem;
+      opacity: 0.6;
+      margin-top: 0.5rem;
+    }
+
+    footer {
+      margin-top: 1rem;
+      opacity: 0.5;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+<h1>UwU Tutorial ✨</h1>
+<p class="subtitle">Lern in 5 Minuten wie man uwu schreibt OwO</p>
+
+<!-- Regeln -->
+<div class="card">
+  <h2>📖 Die Regeln</h2>
+
+  <div class="rule">
+    <span>r &amp; l</span>
+    <span class="rule-arrow">→</span>
+    <code>w</code>
+    <span class="desc">Jedes „r" und „l" wird zu „w" — das ist die wichtigste Regel!</span>
+  </div>
+
+  <div class="rule">
+    <span>th</span>
+    <span class="rule-arrow">→</span>
+    <code>d</code>
+    <span class="desc">„th" klingt zu hart — wird zu einem weichen „d"</span>
+  </div>
+
+  <div class="rule">
+    <span>na, ne, ni, no, nu</span>
+    <span class="rule-arrow">→</span>
+    <code>nya, nye, nyi, nyo, nyu</code>
+    <span class="desc">Macht alles katzenhafter (づ｡◕‿‿◕｡)づ</span>
+  </div>
+
+  <div class="rule">
+    <span>Satzanfang / nach . ? !</span>
+    <span class="rule-arrow">→</span>
+    <code>Stottere den ersten Buchstaben</code>
+    <span class="desc">„Hello" → „H-hewwo" — macht die Sprache schüchtern und süß</span>
+  </div>
+
+  <div class="rule">
+    <span>Jeder Satz</span>
+    <span class="rule-arrow">→</span>
+    <code>Emoticon anhängen</code>
+    <span class="desc">UwU &nbsp;OwO &nbsp;(｡♥‿♥｡) &nbsp;:3 &nbsp;uwu &nbsp;>w< &nbsp;(◕ω◕)</span>
+  </div>
+</div>
+
+<!-- Converter -->
+<div class="card converter">
+  <h2>🔄 Live-Konverter</h2>
+  <label>Dein normaler Text:</label>
+  <textarea id="inputText" rows="3" placeholder="Schreib hier rein…">Hello, I love learning new things!</textarea>
+  <label>UwU-Version:</label>
+  <div class="output-box" id="outputText"></div>
+</div>
+
+<!-- Beispiele -->
+<div class="card">
+  <h2>💬 Beispiele</h2>
+  <div class="examples-grid" id="examplesGrid"></div>
+</div>
+
+<!-- Quiz -->
+<div class="card">
+  <h2>🧠 Quiz — Kannst du es schon?</h2>
+  <div class="quiz-question" id="quizQuestion"></div>
+  <div class="quiz-input-row">
+    <input type="text" id="quizInput" placeholder="Deine UwU-Antwort…" />
+    <button onclick="checkQuiz()">Prüfen ✨</button>
+  </div>
+  <div class="quiz-feedback" id="quizFeedback"></div>
+  <div class="progress" id="quizProgress"></div>
+</div>
+
+<footer>made with OwO &nbsp;·&nbsp; uwu.training</footer>
+
+<script>
+  // ── UwU Konverter ──────────────────────────────────────────────
+  const EMOTICONS = ['UwU', 'OwO', ':3', '>w<', '(◕ω◕)', '(｡♥‿♥｡)', 'uwu', '(づ｡◕‿‿◕｡)づ'];
+
+  function pickEmoticon(seed) {
+    return EMOTICONS[seed % EMOTICONS.length];
+  }
+
+  function uwuify(text) {
+    if (!text.trim()) return '';
+    let out = text;
+
+    // th → d
+    out = out.replace(/th/gi, m => m[0] === m[0].toUpperCase() ? 'D' : 'd');
+
+    // na/ne/ni/no/nu → nya…
+    out = out.replace(/n([aeiou])/gi, (m, v) => {
+      const upper = m[0] === 'N' && m[0] === m[0].toUpperCase();
+      return (upper ? 'N' : 'n') + 'y' + v;
+    });
+
+    // r/l → w
+    out = out.replace(/[rl]/gi, m => m === m.toUpperCase() ? 'W' : 'w');
+
+    // Stutter at sentence starts
+    out = out.replace(/(^|[.!?]\s+)([a-zA-Z])/g, (m, sep, letter) => {
+      return sep + letter + '-' + letter.toLowerCase();
+    });
+
+    // Append emoticon to each sentence
+    let emoIdx = 0;
+    out = out.replace(/([.!?])(\s|$)/g, (m, punct, after) => {
+      return punct + ' ' + pickEmoticon(emoIdx++) + after;
+    });
+
+    // If no sentence-ending punctuation, append one emoticon
+    if (!/[.!?]/.test(text)) {
+      out = out + ' ' + pickEmoticon(0);
+    }
+
+    return out;
+  }
+
+  // Live converter
+  const inputEl  = document.getElementById('inputText');
+  const outputEl = document.getElementById('outputText');
+
+  function updateOutput() {
+    outputEl.textContent = uwuify(inputEl.value);
+  }
+
+  inputEl.addEventListener('input', updateOutput);
+  updateOutput();
+
+  // ── Beispiele ─────────────────────────────────────────────────
+  const EXAMPLES = [
+    'Hello there!',
+    'I love you so much.',
+    'This is really cool!',
+    'Please help me.',
+    'Good morning!',
+    'I like cats a lot.',
+  ];
+
+  const grid = document.getElementById('examplesGrid');
+  EXAMPLES.forEach(ex => {
+    const div = document.createElement('div');
+    div.className = 'example';
+    div.innerHTML = `<div class="before">${ex}</div><div class="after">${uwuify(ex)}</div>`;
+    grid.appendChild(div);
+  });
+
+  // ── Quiz ──────────────────────────────────────────────────────
+  const QUIZ = [
+    { q: 'Wie schreibt man "love" auf UwU?',    a: 'wove' },
+    { q: 'Wie schreibt man "really" auf UwU?',  a: 'weawwy' },
+    { q: 'Wie schreibt man "flower" auf UwU?',  a: 'fwowew' },
+    { q: 'Wie schreibt man "little" auf UwU?',  a: 'wittwe' },
+    { q: 'Wie schreibt man "hello" auf UwU?',   a: 'hewwo' },
+    { q: 'Wie schreibt man "please" auf UwU?',  a: 'pwease' },
+  ];
+
+  let quizIdx = 0;
+  let score   = 0;
+
+  function loadQuiz() {
+    const q = QUIZ[quizIdx];
+    document.getElementById('quizQuestion').textContent = q.q;
+    document.getElementById('quizInput').value = '';
+    document.getElementById('quizFeedback').textContent = '';
+    document.getElementById('quizProgress').textContent =
+      `Frage ${quizIdx + 1} von ${QUIZ.length}  ·  Punkte: ${score}`;
+    document.getElementById('quizInput').focus();
+  }
+
+  function checkQuiz() {
+    const input    = document.getElementById('quizInput').value.trim().toLowerCase();
+    const correct  = QUIZ[quizIdx].a;
+    const feedback = document.getElementById('quizFeedback');
+
+    if (input === correct) {
+      score++;
+      feedback.textContent = '✅ Richtig! UwU';
+      feedback.className   = 'quiz-feedback correct';
+    } else {
+      feedback.textContent = `❌ Fast! Die Antwort wäre: „${correct}"`;
+      feedback.className   = 'quiz-feedback wrong';
+    }
+
+    quizIdx++;
+    if (quizIdx >= QUIZ.length) {
+      setTimeout(() => {
+        document.getElementById('quizQuestion').textContent =
+          `Quiz beendet! Du hast ${score} von ${QUIZ.length} Punkten erreicht. OwO`;
+        document.getElementById('quizInput').disabled = true;
+        document.querySelector('.quiz-input-row button').disabled = true;
+        document.getElementById('quizFeedback').textContent = score === QUIZ.length
+          ? '🎉 Perfekt! Du bist jetzt ein UwU-Meister!'
+          : 'Üb weiter mit dem Konverter oben!';
+        document.getElementById('quizProgress').textContent = '';
+      }, 800);
+    } else {
+      setTimeout(loadQuiz, 900);
+    }
+  }
+
+  document.getElementById('quizInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') checkQuiz();
+  });
+
+  loadQuiz();
+</script>
+</body>
+</html>
